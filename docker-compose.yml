@@ -1,7 +1,7 @@
 version: "3.8"
 services:
    localstack:
-     image: localstack/localstack-full:latest
+     image: localstack/localstack:latest
      container_name: localstack
      ports:
        - "127.0.0.1:4510-4559:4510-4559"  
@@ -24,12 +24,30 @@ services:
       environment:
         - DYNAMO_ENDPOINT=http://localstack:4566
         - AWS_REGION=eu-central-1 
-        - AWS_ACCESS_KEY_ID=devopshobbies
-        - AWS_SECRET_ACCESS_KEY=devopshobbies 
+        - AWS_ACCESS_KEY_ID=distributed
+        - AWS_SECRET_ACCESS_KEY=distributed 
       depends_on:
         - localstack
       networks:
         - "local"
+   producer:
+    image: ghcr.io/justdice/devopstest-producer:latest
+    networks:
+       - "local"
+    environment:
+      - CLOUD_AWS_DEFAULTS_ENDPOINT=http://localstack:4566
+    links:
+      - localstack
+   consumer:
+      image: ghcr.io/justdice/devopstest-consumer:latest
+      environment:
+        - CLOUD_AWS_DEFAULTS_ENDPOINT=http://localstack:4566
+      networks:
+        - "local"
+      links:
+        - localstack
+      restart: always
+
 volumes:
   localstack-data:
     name: localstack-data
