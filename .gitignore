@@ -1,4 +1,18 @@
+# Terraform
+.terraform/
+*.tfstate
+*.tfstate.*
+crash.log
+crash.*.log
+*.tfvars
+!environments/**/terraform.tfvars
+.terraform.tfstate.lock.info
+*.backup
+*.out
+terraform.tfplan
+
+# Local tooling
 .DS_Store
-.infracost/terraform_modules/manifest.json
-.terraform/*
-.vscode/*
+.idea/
+.vscode/
+
