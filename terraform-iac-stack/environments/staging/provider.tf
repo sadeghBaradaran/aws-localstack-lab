@@ -1,7 +1,9 @@
 terraform {
+  required_version = ">= 1.5.0"
+
   backend "s3" {
     bucket         = "my-terraform-state-bucket"
-    key            = "env/${terraform.workspace}/terraform.tfstate"
+    key            = "env/staging/terraform.tfstate"
     region         = "us-east-1"
     dynamodb_table = "terraform-locks"
     encrypt        = true
@@ -10,10 +12,4 @@ terraform {
 
 provider "aws" {
   region = var.aws_region
-
-  default_tags {
-    tags = merge({
-      Project = var.project_name
-    }, var.default_tags)
-  }
 }
