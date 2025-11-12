@@ -25,7 +25,7 @@ terraform-iac-stack/
 │   ├── staging/
 │   └── prod/
 ├── main.tf                 # Root module wiring the stack together
-├── provider.tf             # Backend configuration (S3 + DynamoDB)
+├── provider.tf             # AWS provider configuration
 ├── variables.tf            # Input variables for the stack
 ├── outputs.tf              # Outputs exported by the stack
 ├── versions.tf             # Terraform and provider version constraints
@@ -54,14 +54,14 @@ terraform -chdir=backend init
 terraform -chdir=backend apply
 ```
 
-Ensure the bucket (`my-terraform-state-bucket`) and DynamoDB table (`terraform-locks`) match the values in [`provider.tf`](provider.tf).
+Ensure the bucket (`my-terraform-state-bucket`) and DynamoDB table (`terraform-locks`) match the values configured in each environment backend (see [`environments/*/provider.tf`](./environments)).
 
 ## Using environments
 
 Each environment directory wraps the root module and supplies environment-specific variables. Example workflow for the `dev` environment:
 
 ```bash
-# Initialize the dev environment (configures the remote backend defined in provider.tf)
+# Initialize the dev environment (configures the remote backend defined in this directory)
 terraform -chdir=environments/dev init
 
 # Review the infrastructure changes for dev
